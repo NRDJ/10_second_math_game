@@ -1,5 +1,19 @@
 $(document).ready(function(){
 
+    var createNums = function () {
+        var addNumToDom = function (numID, num) {
+            $(numID).html(num);
+        }
+        
+        var getRandomNum = function() {
+            return Math.floor(Math.random() * (9 - 0 + 1) + 0);
+        }
+
+        addNumToDom(`#first-num`, getRandomNum());
+        addNumToDom(`#second-num`, getRandomNum());
+    }
+
+
     var restartGame = function () {
 
     }
@@ -40,8 +54,9 @@ $(document).ready(function(){
     $('input').keyup(function (event) {
         if (Number(this.value) || this.value === '0') {
             startCountdown();
-            $('input').on()
+            $('input').on();
         };
     });
 
+    createNums();
 });
