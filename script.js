@@ -1,6 +1,11 @@
 $(document).ready(function(){
 
+    var restartGame = function () {
+
+    }
+
     var startCountdown = function () {
+        $('input').off();
         var timePassed = 0;
         var timer = null;
         var startTime;
@@ -11,11 +16,12 @@ $(document).ready(function(){
             secondsPassed = 1;
             timer = setInterval(function () {
                 timePassed = startTime - secondsPassed;
-                
+
                 $("#timer").html(timePassed);
                 
                 if (timePassed <= 0) {
                     stopTimer();
+                    restartGame();
                 }
 
                 secondsPassed += 1;
@@ -29,12 +35,12 @@ $(document).ready(function(){
         };
 
         startTimer();
-        
     }
     
     $('input').keyup(function (event) {
         if (Number(this.value) || this.value === '0') {
             startCountdown();
+            $('input').on()
         };
     });
 
