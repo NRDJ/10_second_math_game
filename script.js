@@ -1,6 +1,7 @@
 $(document).ready(function(){
     var numsAddition;
     var currentScore = 0;
+    var timePassed = 10;
 
     var updateCurrentScore = function (action) {
         var addScoreToDom = function () {
@@ -43,7 +44,7 @@ $(document).ready(function(){
         }
         
         var getRandomNum = function() {
-            return Math.floor(Math.random() * (9 - 0 + 1) + 0);
+            return Math.floor(Math.random() * (9 - 1 + 1) + 1);
         }
 
         var firstNum = addNumToDom(`#first-num`, getRandomNum());
@@ -58,30 +59,27 @@ $(document).ready(function(){
     var startCountdown = function () {
         $('input').off('keyup.number');
         var timer = null;
-        var startTime;
-        
+
         var startTimer = function () {
-          if (!timer) {
-            startTime = 10;
-            secondsPassed = 1;
-            timer = setInterval(function () {
-                timePassed = startTime - secondsPassed;
+            if (!timer) {
+                timer = setInterval(function () {
+                    timePassed -= 1;
+                    console.log(`inner function timepassed: ${timePassed}`);
 
-                $("#timer").html(timePassed);
-                
-                if (timePassed <= 0) {
-                    stopTimer();
-                    restartGame();
-                }
+                    $("#timer").html(timePassed);
 
-                secondsPassed += 1;
-            }, 1000); // Executed every 1 second
-          }
+                    if (timePassed <= 0) {
+                        stopTimer();
+                        restartGame();
+                    }
+
+                }, 1000); // Executed every 1 second
+            }
         };
-        
+
         var stopTimer = function () {
-          window.clearInterval(timer);
-          timer = null;
+            window.clearInterval(timer);
+            timer = null;
         };
 
         startTimer();
@@ -94,7 +92,7 @@ $(document).ready(function(){
         }
     });
 
-    $("input").on('keydown', function (e) {
+    $("input").on('keyup', function (e) {
         var userInput = Number(this.value);        
         if (e.key === 'Enter' || e.keyCode === 13) {
             if (userInput === numsAddition) {
@@ -102,6 +100,9 @@ $(document).ready(function(){
                 createNums();
                 $(this).val('');
                 updateCurrentScore('add');
+                ++timePassed;
+                console.log(`the other timepassed: ${timePassed}`);
+                $("#timer").html(timePassed);
 
             } else {
                 console.log(`incorrect!`)
@@ -113,4 +114,3 @@ $(document).ready(function(){
 
     createNums();
 });
-
