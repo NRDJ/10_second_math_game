@@ -105,7 +105,7 @@ $(document).ready(function(){
 
     $("input").on('keyup', function (e) {
         var userInput = Number(this.value);        
-        if (e.key === 'Enter' || e.keyCode === 13) {
+        if ((e.key === 'Enter' || e.keyCode === 13) && (this.value != '')){
             if (userInput === numsAddition) {
                 createNums();
                 $(this).val('');
