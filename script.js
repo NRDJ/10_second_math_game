@@ -4,6 +4,7 @@ $(document).ready(function(){
     var timePassed = 10;
 
     var updateCurrentScore = function (action) {
+
         var addScoreToDom = function () {
             $('#current-score').html(`Current Score: ${currentScore}`);
         }
@@ -23,18 +24,20 @@ $(document).ready(function(){
         switch (action) {
             case 'add':
                 ++currentScore;
+                addScoreToDom();
                 break;
             case 'remove':
                 --currentScore;
+                addScoreToDom();
                 break;
             case 'restart':
                 currentScore = 0;
+                addScoreToDom();
                 break;
             default:
                 break;
         }
 
-        addScoreToDom();
     }
 
     var createNums = function () {
@@ -53,22 +56,29 @@ $(document).ready(function(){
     }
 
     var restartGame = function () {
+
+        var restartCountdown = function() {
+            timePassed = 10;
+            $("#timer").html(timePassed);
+        }
+        
         updateCurrentScore('restart');
+        restartCountdown();
+        $('input').on('keyup.number', inputHandler);
     }
 
     var startCountdown = function () {
-        $('input').off('keyup.number');
+        $('input').off('keyup.number', inputHandler);
         var timer = null;
 
         var startTimer = function () {
             if (!timer) {
                 timer = setInterval(function () {
                     timePassed -= 1;
-                    console.log(`inner function timepassed: ${timePassed}`);
 
                     $("#timer").html(timePassed);
 
-                    if (timePassed <= 0) {
+                    if (timePassed < 0) {
                         stopTimer();
                         restartGame();
                     }
@@ -84,28 +94,27 @@ $(document).ready(function(){
 
         startTimer();
     }
-    
-    $('input').on('keyup.number', function (e) {
+
+    var inputHandler = function (e) {
         if (Number(this.value) || this.value === '0') {
             startCountdown();
-            $('input').on('keyup.number');
+            console.log('asdf');
         }
-    });
+    }
+    
+    $('input').on('keyup.number', inputHandler);
 
     $("input").on('keyup', function (e) {
         var userInput = Number(this.value);        
         if (e.key === 'Enter' || e.keyCode === 13) {
             if (userInput === numsAddition) {
-                console.log(`correct!`);
                 createNums();
                 $(this).val('');
                 updateCurrentScore('add');
                 ++timePassed;
-                console.log(`the other timepassed: ${timePassed}`);
                 $("#timer").html(timePassed);
 
             } else {
-                console.log(`incorrect!`)
                 $(this).val('');
                 updateCurrentScore('remove');
             }
