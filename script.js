@@ -1,6 +1,7 @@
 $(document).ready(function(){
     var numsAddition;
     var currentScore = 0;
+    var highScore = 0;
     var timePassed = 10;
 
     var updateCurrentScore = function (action) {
@@ -8,18 +9,6 @@ $(document).ready(function(){
         var addScoreToDom = function () {
             $('#current-score').html(`Current Score: ${currentScore}`);
         }
-
-        // var addOnePoint = function () {
-        //     ++currentScore;
-        // }
-
-        // var removeOnePoint = function () {
-        //     --currentScore;
-        // }
-
-        // var restartPoints = function () {
-        //     currentScore = 0;
-        // }
 
         switch (action) {
             case 'add':
@@ -55,6 +44,15 @@ $(document).ready(function(){
         numsAddition =  firstNum + secondNum;
     }
 
+    var setHighScore = function() {
+        if (currentScore > highScore) {
+            highScore = currentScore;
+        }
+
+        $('#high-score').html(`High Score: ${highScore}`);
+
+    }
+
     var restartGame = function () {
 
         var restartCountdown = function() {
@@ -62,13 +60,15 @@ $(document).ready(function(){
             $("#timer").html(timePassed);
         }
         
+        setHighScore();
         updateCurrentScore('restart');
         restartCountdown();
-        $('input').on('keyup.number', inputHandler);
+        $('input').on('keyup.number', startGame);
     }
 
     var startCountdown = function () {
-        $('input').off('keyup.number', inputHandler);
+        //turn off the event handler to avoid starting the timer several times
+        $('input').off('keyup.number', startGame);
         var timer = null;
 
         var startTimer = function () {
@@ -95,14 +95,13 @@ $(document).ready(function(){
         startTimer();
     }
 
-    var inputHandler = function (e) {
+    var startGame = function (e) {
         if (Number(this.value) || this.value === '0') {
             startCountdown();
-            console.log('asdf');
         }
     }
     
-    $('input').on('keyup.number', inputHandler);
+    $('input').on('keyup.number', startGame);
 
     $("input").on('keyup', function (e) {
         var userInput = Number(this.value);        
@@ -113,7 +112,6 @@ $(document).ready(function(){
                 updateCurrentScore('add');
                 ++timePassed;
                 $("#timer").html(timePassed);
-
             } else {
                 $(this).val('');
                 updateCurrentScore('remove');
